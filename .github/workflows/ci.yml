@@ -1,0 +1,19 @@
+name: CI
+on: [push, pull_request] 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest steps:
+      - uses: actions/checkout@v6
+      - run: cmake --build build 
+      - uses: actions/upload-artifact@v7
+        with:
+          name: bin 
+          path: build/cpu_monitor_app
+  test:
+    needs: build 
+    runs-on: ubuntu-latest 
+    steps:
+        - uses: actions/download-artifact@v8
+        - run: ctest -mtest-dir build 
+  
